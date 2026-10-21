@@ -11,8 +11,13 @@ class PortfolioController extends Controller
 {
     public function index()
     {
-        $portfolios = auth()->user()
-            ->portfolios()
+        $user = auth()->user();
+
+        if (!$user) {
+            return redirect()->route('login');
+        }
+
+        $portfolios = $user->portfolios()
             ->latest()
             ->get();
 
@@ -21,10 +26,12 @@ class PortfolioController extends Controller
 
     public function create()
     {
+        $user = auth()->user();
+
         return view('portfolios.form', [
             'portfolio' => new Portfolio([
-                'name' => auth()->user()->name,
-                'email' => auth()->user()->email,
+                'name' => $user->name,
+                'email' => $user->email,
                 'template' => 'modern',
                 'skills' => [],
                 'projects' => [],
@@ -83,6 +90,7 @@ class PortfolioController extends Controller
     public function destroy(Portfolio $portfolio)
     {
         $this->authorizePortfolio($portfolio);
+
         $portfolio->delete();
 
         return redirect()
@@ -95,7 +103,7 @@ class PortfolioController extends Controller
         $this->authorizePortfolio($portfolio);
 
         $portfolio->update([
-            'is_published' => ! $portfolio->is_published,
+            'is_published' => !$portfolio->is_published,
         ]);
 
         return back()->with(
@@ -125,13 +133,15 @@ class PortfolioController extends Controller
     private function authorizePortfolio(Portfolio $portfolio): void
     {
         abort_unless(
-            $portfolio->user_id === auth()->id(),
+            (int) $portfolio->user_id === (int) auth()->id(),
             403
         );
     }
 
-    private function uniqueSlug(string $title, ?int $ignoreId = null): string
-    {
+    private function uniqueSlug(
+        string $title,
+        ?int $ignoreId = null
+    ): string {
         $base = Str::slug($title) ?: 'portfolio';
         $slug = $base;
         $counter = 2;
@@ -140,11 +150,15 @@ class PortfolioController extends Controller
             Portfolio::where('slug', $slug)
                 ->when(
                     $ignoreId,
-                    fn ($query) => $query->where('id', '!=', $ignoreId)
+                    fn ($query) => $query->where(
+                        'id',
+                        '!=',
+                        $ignoreId
+                    )
                 )
                 ->exists()
         ) {
-            $slug = $base.'-'.$counter++;
+            $slug = $base . '-' . $counter++;
         }
 
         return $slug;
@@ -159,7 +173,10 @@ class PortfolioController extends Controller
             'bio' => ['nullable', 'string', 'max:5000'],
             'email' => ['nullable', 'email', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
-            'template' => ['required', Rule::in(['modern', 'simple'])],
+            'template' => [
+                'required',
+                Rule::in(['modern', 'simple']),
+            ],
             'skills_text' => ['nullable', 'string', 'max:5000'],
             'projects_text' => ['nullable', 'string', 'max:10000'],
             'github' => ['nullable', 'url', 'max:255'],
@@ -169,16 +186,24 @@ class PortfolioController extends Controller
         ]);
 
         $data['skills'] = collect(
-            preg_split('/[\r\n,]+/', $data['skills_text'] ?? '')
-        )->map(fn ($value) => trim($value))
+            preg_split(
+                '/[\r\n,]+/',
+                $data['skills_text'] ?? ''
+            ) ?: []
+        )
+            ->map(fn ($value) => trim($value))
             ->filter()
             ->unique()
             ->values()
             ->all();
 
         $data['projects'] = collect(
-            preg_split('/\r\n|\r|\n/', $data['projects_text'] ?? '')
-        )->map(fn ($line) => trim($line))
+            preg_split(
+                '/\r\n|\r|\n/',
+                $data['projects_text'] ?? ''
+            ) ?: []
+        )
+            ->map(fn ($line) => trim($line))
             ->filter()
             ->map(fn ($line) => [
                 'title' => $line,
@@ -192,7 +217,9 @@ class PortfolioController extends Controller
             'github' => $data['github'] ?? '',
             'linkedin' => $data['linkedin'] ?? '',
             'website' => $data['website'] ?? '',
-        ])->filter()->all();
+        ])
+            ->filter()
+            ->all();
 
         unset(
             $data['skills_text'],
