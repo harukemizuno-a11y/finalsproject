@@ -94,3 +94,5 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/p/{slug}', [PortfolioController::class, 'publicShow'])
     ->name('portfolios.public');
+
+

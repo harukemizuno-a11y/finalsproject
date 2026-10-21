@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Log In — PurpFolio')
@@ -9,7 +8,7 @@
         <h1 style="font-size:32px">Welcome back</h1>
         <p class="muted">Log in to manage your portfolio.</p>
 
-        <form method="POST" action="/login">
+        <form method="POST" action="{{ route('login.store') }}">
             @csrf
 
             <div class="form-group">
@@ -61,7 +60,7 @@
 
         <p class="muted" style="text-align:center;margin-top:20px">
             Don't have an account?
-            <a href="/register">Create one</a>
+            <a href="{{ route('register') }}">Create one</a>
         </p>
     </div>
 </div>
