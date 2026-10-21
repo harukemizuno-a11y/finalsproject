@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,19 +8,24 @@
 
     <style>
         :root {
-            --purple: #7657f6;
-            --purple-dark: #6242e6;
-            --ink: #201c35;
-            --muted: #77738b;
-            --line: #e9e6f2;
+            --purple: #7950f2;
+            --purple-dark: #6538d4;
+            --ink: #211b3d;
+            --muted: #77718a;
+            --line: #e9e1f4;
             --surface: #fff;
-            --background: #f8f7fc;
+            --background: #faf8fd;
         }
 
         * { box-sizing: border-box; }
 
+        html { min-height: 100%; }
+
         body {
             margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             background: var(--background);
             color: var(--ink);
             font-family: Inter, ui-sans-serif, system-ui, -apple-system,
@@ -33,29 +37,78 @@
         button, input, textarea, select { font: inherit; }
 
         .nav {
+            position: relative;
+            z-index: 10;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
-            padding: 18px max(5%, calc((100% - 1120px)/2));
-            background: white;
+            gap: 24px;
+            width: 100%;
+            padding: 14px max(5%, calc((100% - 1240px)/2));
+            background: rgba(255,255,255,.96);
             border-bottom: 1px solid var(--line);
         }
 
         .brand {
-            font-size: 23px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            white-space: nowrap;
+            font-size: 21px;
             font-weight: 850;
-            letter-spacing: -1px;
-            color: var(--ink);
+            letter-spacing: -.8px;
+            color: #6e35d8;
         }
 
-        .brand span { color: var(--purple); }
+        .brand-mark {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 29px;
+            height: 29px;
+            border-radius: 9px;
+            background: linear-gradient(145deg, #a46bff, #6929e8);
+            color: white;
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 0 5px 14px #8250ed35;
+        }
+
+        .brand-mark::after {
+            content: "";
+            position: absolute;
+            inset: 4px -4px 4px 4px;
+            z-index: -1;
+            border: 1.5px solid #c5a5ff;
+            border-radius: 9px;
+            transform: rotate(20deg);
+        }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 18px;
+            justify-content: flex-end;
+            gap: 27px;
             flex-wrap: wrap;
+        }
+
+        .nav-links > a:not(.btn) {
+            color: #50465e;
+            font-size: 14px;
+            font-weight: 650;
+            transition: color .2s;
+        }
+
+        .nav-links > a:not(.btn):hover {
+            color: var(--purple);
+        }
+
+        .nav-links form { margin: 0; }
+
+        .page-main {
+            width: 100%;
+            flex: 1;
         }
 
         .container {
@@ -90,27 +143,30 @@
             justify-content: center;
             align-items: center;
             border: 0;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 11px 17px;
             font-weight: 700;
             cursor: pointer;
-            background: var(--purple);
+            background: linear-gradient(110deg, #8040a4, #a052bd);
             color: white;
+            transition: transform .2s, box-shadow .2s, background .2s;
         }
 
         .btn:hover {
-            background: var(--purple-dark);
             color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 7px 18px #8040a425;
         }
 
         .btn.secondary {
             background: white;
-            color: var(--ink);
-            border: 1px solid var(--line);
+            color: #77429a;
+            border: 1px solid #ddc8eb;
+            box-shadow: none;
         }
 
         .btn.danger { background: #fff0f0; color: #b42332; }
-        .btn.small { padding: 7px 11px; font-size: 13px; }
+        .btn.small { padding: 9px 15px; font-size: 13px; }
 
         .actions {
             display: flex;
@@ -213,10 +269,15 @@
 
         .footer {
             text-align: center;
-            padding: 32px 15px;
-            color: var(--muted);
-            font-size: 13px;
+            padding: 25px 15px 17px;
+            color: #77718a;
+            font-size: 14px;
+            border-top: 1px solid var(--line);
+            background: #fff;
         }
+
+        .footer p { margin: 0; }
+        .footer p + p { margin-top: 1px; }
 
         .template-modern { background: linear-gradient(135deg,#f7f3ff,#fff 55%); }
         .template-simple { background: #fff; }
@@ -229,53 +290,112 @@
         }
 
         @media(max-width: 760px) {
+            .nav {
+                align-items: center;
+                flex-direction: column;
+                gap: 14px;
+                padding: 15px 5%;
+            }
+
+            .nav-links {
+                justify-content: center;
+                gap: 14px 20px;
+            }
+
             .grid { grid-template-columns: 1fr; }
-            .nav { align-items: flex-start; flex-direction: column; }
             .container { margin: 24px auto; }
             .hero { padding: 35px 0; }
             h1 { letter-spacing: -1px; }
         }
+
+        @media(max-width: 420px) {
+            .nav-links { gap: 12px 15px; }
+            .nav-links > a:not(.btn) { font-size: 13px; }
+            .brand { font-size: 20px; }
+        }
+        /* Creative portfolio template */
+.portfolio-hero.template-creative {
+    background: linear-gradient(135deg, #24113f 0%, #542a85 55%, #9163c9 100%);
+    color: #ffffff;
+    padding: 56px 40px;
+    border-radius: 24px;
+    box-shadow: 0 18px 45px rgba(68, 35, 105, 0.2);
+}
+
+.portfolio-hero.template-creative h1 {
+    color: #ffffff;
+    font-size: clamp(36px, 6vw, 58px);
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+}
+
+.portfolio-hero.template-creative h2,
+.portfolio-hero.template-creative .eyebrow {
+    color: #eadbff;
+}
+
+.portfolio-hero.template-creative .muted {
+    color: #e4d6f5;
+}
+
+.portfolio-hero.template-creative .btn {
+    background: #ffffff;
+    color: #542a85;
+    border: 1px solid #ffffff;
+}
+
+@media (max-width: 600px) {
+    .portfolio-hero.template-creative {
+        padding: 32px 22px;
+    }
+}
     </style>
+
 </head>
 
 <body>
     <nav class="nav">
-        <a class="brand" href="/">Purp<span>Folio</span></a>
+        <a class="brand" href="/">
+            <span class="brand-mark" aria-hidden="true">P</span>
+            <span>PurpFolio</span>
+        </a>
 
         <div class="nav-links">
-            @auth
-                <a href="/dashboard">Dashboard</a>
+            <a href="/">Home</a>
 
-                <a class="btn small" href="/portfolios/create">
-                    + New portfolio
-                </a>
+            @auth
+                <a href="/portfolios/create">Create</a>
+                <a href="/portfolios/create">Templates</a>
+                <a href="/dashboard">Manage</a>
 
                 <form method="POST" action="/logout">
                     @csrf
                     <button class="btn secondary small" type="submit">
-                        Log out
+                        Log Out
                     </button>
                 </form>
             @else
-                <a href="/login">Log in</a>
-
-                <a class="btn small" href="/register">
-                    Get started
-                </a>
+                <a href="/portfolios/create">Create</a>
+                <a href="/portfolios/create">Templates</a>
+                <a href="/login">Manage</a>
+                <a class="btn secondary small" href="/login">Log In</a>
             @endauth
         </div>
     </nav>
 
-    <main class="container">
+    <main class="page-main">
         @if(session('success'))
-            <div class="notice">{{ session('success') }}</div>
+            <div class="container">
+                <div class="notice">{{ session('success') }}</div>
+            </div>
         @endif
 
         @yield('content')
     </main>
 
     <footer class="footer">
-        Made with PurpFolio · Build a portfolio that represents you.
+        <p>© {{ date('Y') }} PurpFolio</p>
+        <p>Information Management · HCI · Web Systems Technology 2</p>
     </footer>
 </body>
 </html>

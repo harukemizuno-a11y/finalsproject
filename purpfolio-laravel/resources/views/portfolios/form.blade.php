@@ -122,6 +122,9 @@
                     <option value="simple" @selected(old('template', $portfolio->template) === 'simple')>
                         Simple — clean white background
                     </option>
+                    <option value="creative" @selected(old('template', $portfolio->template) === 'creative')>
+                     Creative — bold purple gradient
+                </option>
                 </select>
                 @error('template') <div class="error">{{ $message }}</div> @enderror
             </div>

@@ -173,10 +173,12 @@ class PortfolioController extends Controller
             'bio' => ['nullable', 'string', 'max:5000'],
             'email' => ['nullable', 'email', 'max:255'],
             'location' => ['nullable', 'string', 'max:255'],
+
             'template' => [
                 'required',
-                Rule::in(['modern', 'simple']),
+                Rule::in(['modern', 'simple', 'creative']),
             ],
+
             'skills_text' => ['nullable', 'string', 'max:5000'],
             'projects_text' => ['nullable', 'string', 'max:10000'],
             'github' => ['nullable', 'url', 'max:255'],

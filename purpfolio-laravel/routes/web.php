@@ -79,8 +79,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/portfolios/{portfolio}', [PortfolioController::class, 'destroy'])
         ->name('portfolios.destroy');
 
-    Route::post('/portfolios/{portfolio}/publish', [PortfolioController::class, 'togglePublish'])
-        ->name('portfolios.publish');
+Route::post('/portfolios/{portfolio}/publish', [PortfolioController::class, 'publish'])
+    ->name('portfolios.publish');
+
 
     Route::get('/portfolios/{portfolio}/preview', [PortfolioController::class, 'preview'])
         ->name('portfolios.preview');

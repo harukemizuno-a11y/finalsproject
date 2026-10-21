@@ -11,7 +11,7 @@
         </div>
     @endif
 
-    <section class="portfolio-hero {{ $portfolio->template === 'simple' ? 'template-simple' : 'template-modern' }}">
+    <section class="portfolio-hero template-{{ in_array($portfolio->template, ['modern', 'simple', 'creative'], true) ? $portfolio->template : 'modern' }}">
         <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
             @if($portfolio->avatar)
                 <img class="avatar" src="{{ $portfolio->avatar }}"
