@@ -30,7 +30,6 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-
         $request->session()->regenerate();
 
         return redirect('/dashboard');
@@ -56,7 +55,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/dashboard');
+        return redirect('/dashboard');
     }
 
     public function logout(Request $request)
